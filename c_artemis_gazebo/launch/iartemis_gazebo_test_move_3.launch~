@@ -1,0 +1,25 @@
+<launch>
+
+  <rosparam file="$(find c_iartemis_gazebo)/iartemis_control/config/joint_position_control.yaml" command="load" />
+
+  <node name="iartemis_controller" pkg="controller_manager" type="spawner" 
+        respawn ="false"
+        output="screen" 
+        ns="/iartemis"
+        args="joint_state_controller
+              joint_front_left_wheel_controller
+              joint_front_right_wheel_controller
+              joint_rear_left_wheel_controller
+              joint_rear_right_wheel_controller 
+              joint_middle_left_wheel_controller
+              joint_middle_right_wheel_controller
+              <!--joint_front_triangle_base_to_front_right_direction_axis_controller
+              joint_rear_triangle_base_to_rear_right_direction_axis_controller-->" />
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" 
+        respawn="false" 
+        output="screen">
+    <remap from="/joint_states" to="/iartemis/joint_states" />
+  </node>
+
+</launch>

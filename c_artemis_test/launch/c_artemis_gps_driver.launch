@@ -1,0 +1,28 @@
+<!-- gps and ime driver launcher -->
+<launch>
+
+    <arg name="serial_port_imu" default="/dev/ttyS2" />
+    <arg name="serial_port_gps" default="/dev/ttyS3" />
+    <arg name="baudrate_imu" default="115200" /> <!-- not used -->
+    <arg name="baudrate_gps" default="115200" /> 
+
+    <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="navsat" respawn="true">
+        <param name="port" value="$(arg serial_port_gps)"/>
+        <param name="baud" value="$(arg baudrate_gps)"/>
+    </node>
+
+    <node pkg="microstrain_3dmgx1_imu" name="imu_node" type="imu_node.py" output="screen">
+        <param name="serial_port" value="$(arg serial_port_imu)" />
+    </node>
+
+
+    <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node" respawn="true">
+        <param name="magnetic_declination_radians" value="0"/>
+        <param name="yaw_offset" value="0"/>
+
+        <remap from="/imu/data" to="/imu_data" />
+        <remap from="/gps/fix" to="/fix" />
+        <remap from="/odom" to="/gps/odom"/>
+    </node>
+
+</launch>

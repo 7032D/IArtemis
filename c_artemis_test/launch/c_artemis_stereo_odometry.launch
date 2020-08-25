@@ -1,0 +1,73 @@
+<!-- Launch file for stereo odometry node -->
+<launch>
+
+  <!-- Choose visualization -->
+   <arg name="rviz" default="false" />
+   <arg name="rtabmapviz" default="false" />
+   <param name="use_sim_time" type="bool" value="False"/>
+
+<!-- Stereo camera -->
+  <group ns="/odom_camera" >
+    <node pkg="nodelet" type="nodelet" name="stereo_nodelet"  args="manager"/>
+
+    <node pkg="ueye" name="stereo" type="stereo">
+        <param name="auto_exposure" value="True"/>
+        <param name="color" value="0"/>
+        <param name="frame_rate" value="5"/>
+        <param name="lCameraId" value="15"/>
+        <param name="rCameraId" value="16"/> 
+        <param name="l_frame_id" value="/odom_camera/left"/>
+        <param name="r_frame_id" value="/odom_camera/right"/> 
+    </node>
+
+    <node pkg="stereo_image_proc" name="stereo_image_proc" type="stereo_image_proc">
+          <param name="approximate_sync" value="True"/>
+    </node>
+  </group>
+
+<!-- Nav camera -->
+    <group ns="/nav_camera" >
+    <node pkg="nodelet" type="nodelet" name="stereo_nodelet"  args="manager"/>
+
+    <node pkg="ueye" name="stereo" type="stereo">
+        <param name="auto_exposure" value="True"/>
+        <param name="color" value="0"/>
+        <param name="frame_rate" value="5"/>
+        <param name="lCameraId" value="25"/>
+        <param name="rCameraId" value="26"/>
+        <param name="l_frame_id" value="/nav_camera/left"/>
+        <param name="r_frame_id" value="/nav_camera/right"/> 
+    </node>
+
+    <node pkg="stereo_image_proc" name="stereo_image_proc" type="stereo_image_proc">
+          <param name="approximate_sync" value="True"/>
+    </node>
+  </group>
+
+
+<!-- rtabmap -->
+   <group ns="rtabmap">  
+    <!-- Stereo Odometry -->
+     <node pkg="rtabmap_ros" name="stereo_odometry" type="stereo_odometry" output="screen">
+          <param name="approx_sync" value="True"/>
+          <param name="frame_id" type="string" value="base_footprint"/>
+          <param name="odom_frame_id" type="string" value="odom"/>
+
+          <remap from="left/image_rect" to="/odom_camera/left/image_rect"/>
+          <remap from="right/image_rect" to="/odom_camera/right/image_rect"/>
+          <remap from="left/camera_info" to="/odom_camera/left/camera_info"/>
+          <remap from="right/camera_info" to="/odom_camera/right/camera_info"/>
+          <remap from="/rtabmap/odom" to="/visual_odom"/>
+
+          <!-- used for visualization -->
+         <!-- <param name="Odom/Strategy"      type="string" value="0"/>-->  <!-- 0=Frame-to-Map, 1=Frame=to=Frame -->
+         <!-- <param name="Vis/EstimationType" type="string" value="0"/>-->  <!-- 0=3D->3D 1=3D->2D (PnP) -->
+         <param name="Vis/MaxDepth"       type="string" value="10"/>
+         <param name="Vis/MinInliers"     type="string" value="10"/>
+         <param name="Odom/FillInfoData"  type="string" value="$(arg rtabmapviz)"/> 
+         <param name="GFTT/MinDistance"   type="string" value="10"/>
+         <param name="GFTT/QualityLevel"  type="string" value="0.00001"/>
+    </node>
+  </group>
+
+</launch>

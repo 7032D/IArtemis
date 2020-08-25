@@ -1,0 +1,77 @@
+ <launch>
+  <arg name="turret_port" default="/dev/ttyS1" />
+
+  <arg name="wheeldiam" value=".36" />
+  <arg name="base_z" value=".128" />
+
+  <arg name="arm_proj_x" value=".388" />
+  <arg name="arm_proj_z" value=".132" />
+
+  <arg name="arm_ext_proj_x" value=".0646" />
+  <arg name="arm_ext_proj_z" value=".074" /> 
+
+  <arg name="arm_mobile_ext_1_proj_x" value=".0646" />
+  <arg name="arm_mobile_ext_1_proj_z" value=".112" /> 
+
+  <arg name="arm_mobile_ext_2_proj_x" value=".0958" />
+  <arg name="arm_mobile_ext_2_proj_z" value=".087" /> 
+
+  <arg name="arm_mobile_ext_3_proj_x" value=".0724" />
+  <arg name="arm_mobile_ext_3_proj_z" value=".125" /> 
+
+  <arg name="middle_direction_axis_proj_y" value=".325" />
+  <arg name="middle_direction_axis_proj_z" value=".058" />
+
+  <arg name="turret_arm_x_ref_base" value=".176001948" /> <!-- to pan_turret -->
+  <arg name="turret_arm_y_ref_base" value=".019359919" />
+
+ <param name="robot_description" command="$(find xacro)/xacro.py '$(find c_iartemis_gazebo)/urdf/c_iartemis_urdf_model_fixed_publisher.urdf.xacro'"/>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  static tf publisher xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_middle_triangle_base" args="0 0 ${base_z/2-.058+wheeldiam/2} 0 0 0 base_footprint base_link 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="base_to_turret_arm" args="${turret_arm_x_ref_base} ${-turret_arm_y_ref_base} ${-base_z/2-middle_direction_axis_proj_z-wheeldiam/2} 0 0 0 base_link turret_arm 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_base_link" args="0 0 ${-base_z/2} 0 0 0 base_link middle_triangle_base 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="middle_triangle_base_to_middle_right_direction_axis" args="0 ${-0.07} 0 0 0 0 middle_triangle_base middle_right_direction_axis 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="middle_triangle_base_to_middle_left_direction_axis" args="0 ${0.07} 0 0 0 0 middle_triangle_base middle_left_direction_axis 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="middle_right_direction_axis_to_middle_right_steering_support" args="0 ${-middle_direction_axis_proj_y} ${-middle_direction_axis_proj_z} 0 0 0 middle_right_direction_axis middle_right_steering_support 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="middle_left_direction_axis_to_middle_left_steering_support" args="0 ${middle_direction_axis_proj_y} ${-middle_direction_axis_proj_z} 0 0 0 middle_left_direction_axis middle_left_steering_support 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="base_to_front_arm" args="0 0 ${-base_z/2} 0 0 0 base_link front_arm 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="base_to_rear_arm" args="0 0 ${-base_z/2} 0 0 0 base_link rear_arm 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="front_arm_to_front_arm_ext" args="${arm_proj_x} 0 ${arm_proj_z} 0 0 0 front_arm front_arm_ext 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="rear_arm_to_rear_arm_ext" args="${-1*arm_proj_x} 0 ${arm_proj_z} 0 0 0 rear_arm rear_arm_ext 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="front_arm_ext_to_front_arm_mobile_ext_1" args="${(arm_ext_proj_x)} 0 ${arm_ext_proj_z} 0 0 0 front_arm_ext front_arm_mobile_ext_1 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="rear_arm_ext_to_rear_arm_mobile_ext_1" args="${-1*(arm_ext_proj_x)} 0 ${arm_ext_proj_z} 0 0 0 rear_arm_ext rear_arm_mobile_ext_1 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="front_arm_mobile_ext_1_to_front_arm_mobile_ext_2" args="${(-1*arm_mobile_ext_1_proj_x)} 0 ${-1*arm_mobile_ext_1_proj_z} 0 0 0 front_arm_mobile_ext_1 front_arm_mobile_ext_2 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="rear_arm_mobile_ext_1_to_rear_arm_mobile_ext_2" args="${(arm_mobile_ext_1_proj_x)} 0 ${-1*arm_mobile_ext_1_proj_z} 0 0 0 rear_arm_mobile_ext_1 rear_arm_mobile_ext_2 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="front_arm_mobile_ext_2_to_front_arm_mobile_ext_3" args="${(-1*arm_mobile_ext_2_proj_x)} 0 ${-1*arm_mobile_ext_2_proj_z} 0 0 0 front_arm_mobile_ext_2 front_arm_mobile_ext_3 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="rear_arm_mobile_ext_2_to_rear_arm_mobile_ext_3" args="${(arm_mobile_ext_2_proj_x)} 0 ${-1*arm_mobile_ext_2_proj_z} 0 0 0 rear_arm_mobile_ext_2 rear_arm_mobile_ext_3 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="front_arm_mobile_ext_2_to_front_triangle_base" args="0.050 0 ${arm_mobile_ext_1_len/2} 0 0 0 front_arm_mobile_ext_2 front_triangle_base 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="rear_arm_mobile_ext_2_to_rear_triangle_base" args="${-1*0.050} 0 ${arm_mobile_ext_1_len/2} 0 0 0 rear_arm_mobile_ext_2 rear_triangle_base 100"/>
+
+  <node pkg="tf" type="static_transform_publisher" name="front_right_direction_axis_to_front_left_direction_axis" args="0 0 0 0 0 0 front_right_direction_axis front_left_direction_axis 100"/>
+  <node pkg="tf" type="static_transform_publisher" name="rear_right_direction_axis_to_rear_left_direction_axis" args="0 0 0 0 0 0 rear_right_direction_axis rear_left_direction_axis 100"/>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+  <node pkg="joint_state_publisher" type="joint_state_publisher" name="jt_st_pub" />
+
+  <node name="ptu_driver" pkg="flir_ptu_driver" type="ptu_node">
+    <param name="port" value="$(arg turret_port)" />
+    <remap from="state" to="/joint_states" />
+  </node>
+
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" />
+
+</launch>
+
+<!--  <node name="rviz" pkg="rviz" type="rviz" required="true" /> -->

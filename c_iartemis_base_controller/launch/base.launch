@@ -1,0 +1,10 @@
+<!-- Launch file for base -->
+<launch>
+  <node pkg="c_iartemis_base_controller" type="dcmc_rv_motor_controller" name="dcmc_rv_motor_controller">
+    <remap from="/odom" to="/wheel_odom"/>
+  </node>
+  <node pkg="c_iartemis_pid" type="c_pid_node" name="c_pid_node">
+  </node>
+  <node pkg="c_iartemis_twist_to_motors" type="c_twist_to_motors_tank" name="c_twist_to_motors_tank">
+  </node>
+</launch>

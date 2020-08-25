@@ -1,0 +1,31 @@
+rosservice call /odom_camera/left/set_camera_info "camera_info:
+  header:
+    seq: 0
+    stamp: {secs: 0, nsecs: 0}
+    frame_id: 'odom_camera/left'
+  height: 1024
+  width: 1280
+  distortion_model: 'plumb_bob'
+  D: [-0.266954, 0.134285, -0.001145, -0.000878, 0.000000]
+  K: [1090.222019, 0.000000, 644.845692, 0.000000, 1087.467098, 525.534124, 0.000000, 0.000000, 1.000000]
+  R: [0.995568, 0.004987, -0.093908, -0.005157, 0.999985, -0.001567, 0.093898, 0.002044, 0.995580]
+  P: [1040.999659, 0.000000, 774.447803, 0.000000, 0.000000, 1040.999659, 524.684700, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]
+  binning_x: 0
+  binning_y: 0
+  roi: {x_offset: 0, y_offset: 0, height: 0, width: 0, do_rectify: false}"                                                       
+
+ rosservice call /odom_camera/right/set_camera_info "camera_info:
+  header:
+    seq: 0
+    stamp: {secs: 0, nsecs: 0}
+    frame_id: 'odom_camera/right'
+  height: 1024
+  width: 1280
+  distortion_model: 'plumb_bob'
+  D: [-0.265558, 0.122307, -0.001794, -0.000490, 0.000000]
+  K: [1103.092092, 0.000000, 650.316455, 0.000000, 1099.539857, 527.385128, 0.000000, 0.000000, 1.000000]
+  R: [0.995387, -0.004391, -0.095839, 0.004564, 0.999988, 0.001590, 0.095831, -0.002021, 0.995396]
+  P: [1040.999659, 0.000000, 774.447803, -104.729820, 0.000000, 1040.999659, 524.684700, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]
+  binning_x: 0
+  binning_y: 0
+  roi: {x_offset: 0, y_offset: 0, height: 0, width: 0, do_rectify: false}" 

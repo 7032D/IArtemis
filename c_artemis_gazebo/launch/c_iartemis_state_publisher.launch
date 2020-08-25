@@ -1,0 +1,20 @@
+ <launch>
+  <arg name="turret_port" default="/dev/ttyS1" />
+  <arg name="turret_freq" default="10" />
+
+ <node pkg="robot_state_publisher" type="robot_state_publisher" name="rob_st_pub" />
+
+ <param name="robot_description" command="$(find xacro)/xacro.py '$(find c_iartemis_gazebo)/urdf/c_iartemis_urdf_model.urdf.xacro'"/>
+
+  <node name="ptu_driver" pkg="flir_ptu_driver" type="ptu_node" ns="flir_ptu">
+    <param name="port" value="$(arg turret_port)" />
+    <param name="hz" value="$(arg turret_freq)" />
+    <remap from="state" to="joint_states" />
+  </node>
+
+  <node pkg="joint_state_publisher" type="joint_state_publisher" name="jt_st_pub">
+    <rosparam param="source_list">["flir_ptu/joint_states"] </rosparam> 
+  </node>
+</launch>
+
+

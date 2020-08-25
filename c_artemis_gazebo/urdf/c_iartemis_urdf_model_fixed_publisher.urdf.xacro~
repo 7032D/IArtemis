@@ -1,0 +1,1345 @@
+<?xml version="1.0"?>
+<robot name="iartemis" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="wheeldiam" value=".36" />
+  <xacro:property name="wheelthick" value=".146" />
+  <xacro:property name="pi" value="3.1415" />
+
+  <xacro:property name="base_x" value=".154" />
+  <xacro:property name="base_y" value=".14" />
+  <xacro:property name="base_z" value=".128" />
+
+  <xacro:property name="arm_proj_x" value=".388" />
+  <xacro:property name="arm_proj_z" value=".132" />
+  <xacro:property name="arm_len" value=".4098" />
+
+  <xacro:property name="arm_ext_proj_x" value=".0646" />
+  <xacro:property name="arm_ext_proj_z" value=".074" /> 
+  <xacro:property name="arm_ext_len" value=".1149782588" /> 
+
+  <xacro:property name="arm_mobile_ext_1_proj_x" value=".0646" />
+  <xacro:property name="arm_mobile_ext_1_proj_z" value=".112" /> 
+  <xacro:property name="arm_mobile_ext_1_len" value=".1292948568" /> 
+
+  <xacro:property name="arm_mobile_ext_2_proj_x" value=".0958" />
+  <xacro:property name="arm_mobile_ext_2_proj_z" value=".087" /> 
+  <xacro:property name="arm_mobile_ext_2_len" value=".1294088096" /> 
+
+  <xacro:property name="arm_mobile_ext_3_proj_x" value=".0724" />
+  <xacro:property name="arm_mobile_ext_3_proj_z" value=".125" /> 
+  <xacro:property name="arm_mobile_ext_3_len" value=".1444533143" /> 
+
+  <xacro:property name="triangle_side_proj_y" value=".040" />
+  <xacro:property name="triangle_side_proj_z" value=".162" />
+  <xacro:property name="triangle_side_len" value=".166865215" />
+
+  <xacro:property name="balance_support_proj_y" value=".342" />
+  <xacro:property name="balance_support_proj_z" value=".082" />
+  <xacro:property name="balance_support_len" value=".351693048" />
+
+  <xacro:property name="steering_support_proj_y" value=".013" />
+  <xacro:property name="steering_support_proj_z" value=".138" />
+  <xacro:property name="steering_support_len" value=".138610966" />
+
+  <xacro:property name="direction_axis_proj_y" value=".395" />
+  <xacro:property name="direction_axis_proj_z" value=".058" />
+  <xacro:property name="direction_axis_len" value=".399235519" />
+
+  <xacro:property name="middle_triangle_side_proj_y" value=".070" />
+  <xacro:property name="middle_triangle_side_proj_z" value=".176" />
+  <xacro:property name="middle_triangle_side_len" value=".189409609" />
+
+  <xacro:property name="middle_balance_support_proj_y" value=".382" />
+  <xacro:property name="middle_balance_support_proj_z" value=".096" />
+  <xacro:property name="middle_balance_support_len" value=".39387815374" />
+
+  <xacro:property name="middle_steering_support_proj_y" value=".013" />
+  <xacro:property name="middle_steering_support_proj_z" value=".138" />
+  <xacro:property name="middle_steering_support_len" value=".138610966" />
+
+  <xacro:property name="middle_direction_axis_proj_y" value=".325" />
+  <xacro:property name="middle_direction_axis_proj_z" value=".058" />
+  <xacro:property name="middle_direction_axis_len" value=".330134821" />
+
+  <xacro:property name="turret_arm_x_ref_base" value=".176001948" /> <!-- to pan_turret -->
+  <xacro:property name="turret_arm_y_ref_base" value=".019359919" />
+  <xacro:property name="turret_arm_z_ref_base" value="1.686446609" />
+  <xacro:property name="turret_arm_len" value="${turret_arm_z_ref_base-base_z-middle_direction_axis_proj_z-wheeldiam/2}" />
+
+  <xacro:property name="pan_to_tilt_turret" value=".046228" />
+
+  <xacro:property name="tilt_to_opt_center_nav_SB_x" value=".003" /> <!-- approxiative measure -->
+  <xacro:property name="tilt_to_opt_center_nav_SB_y" value=".050" />
+  <xacro:property name="tilt_to_opt_center_nav_SB_z" value=".080486" />
+
+  <xacro:property name="imu_x_ref_base" value=".087" /> <!-- approxiative measure -->
+  <xacro:property name="imu_y_ref_base" value=".003" /> <!-- approxiative measure -->
+  <xacro:property name="imu_z_ref_base" value="1.3499" /> <!-- approxiative measure -->
+
+  <xacro:property name="gps_arm_x_ref_base" value="-.027790953" />
+  <xacro:property name="gps_arm_y_ref_base" value=".007436771" />
+  <xacro:property name="gps_arm_z_ref_base" value="1.069868718" />
+  <xacro:property name="gps_arm_len" value="${gps_arm_z_ref_base-base_z-middle_direction_axis_proj_z-wheeldiam/2}" />
+
+  <xacro:property name="cam_odom_arm_x_ref_base" value=".407790953" />
+  <xacro:property name="cam_odom_arm_y_ref_base" value=".007436771" />
+  <xacro:property name="cam_odom_arm_z_ref_base" value=".969868718" />
+  <xacro:property name="cam_odom_arm_len" value="${cam_odom_arm_z_ref_base-base_z-middle_direction_axis_proj_z-wheeldiam/2}" />
+
+  <xacro:property name="cam_odom_tilt_ref_base" value="0.59341194567" /> <!-- approxiative measure  34° -->
+  <xacro:property name="cam_odom_arm_to_opt_center_odom_SB_x" value=".037" /> <!-- approxiative measure -->
+  <xacro:property name="cam_odom_arm_to_opt_center_odom_SB_y" value=".050" />
+  <xacro:property name="cam_odom_arm_to_opt_center_odom_SB_z" value=".04137" />
+
+  <xacro:property name="pan_velocity" value="1.0" />
+  <xacro:property name="pan_range" value="2.775" />
+  <xacro:property name="tilt_velocity" value="1.0" />
+  <xacro:property name="tilt_up_range" value="0.52" />
+  <xacro:property name="tilt_down_range" value="0.82" />
+  <xacro:property name="joint_effort" value="30" />
+  
+  <xacro:property name="camera_link" value="0.05"/>
+
+  <material name="blue">
+    <color rgba="0 0 .8 1"/>
+  </material>
+
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
+  <material name="grey">
+    <color rgba=".5 .5 .5 1"/>
+  </material>
+
+  <xacro:macro name="default_inertial" params="mass">
+    <inertial>
+      <mass value="${mass}" />
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+    </inertial>
+  </xacro:macro>
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+<!--base_link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="${base_x} ${base_y} ${base_z}"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${base_x} ${base_y} ${base_z}"/>
+      </geometry>
+    </collision>
+    <!-- <xacro:default_inertial mass="10"/>-->
+  </link>
+  <gazebo reference="base_link">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <link name="base_footprint"/>
+  <joint name="base_footprint_to_base_link" type="fixed">
+    <origin xyz="0 0 ${+base_z/2+.058+wheeldiam/2}" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+  </joint> 
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+<!-- arm_macro -->
+  <xacro:macro name="arm" params="prefix reflect">
+
+<!-- arm -->
+    <link name="${prefix}_arm">
+      <visual>
+        <geometry>
+          <box size="${arm_len} .054 .049"/>
+        </geometry>
+        <origin xyz="${reflect*arm_proj_x/2} 0 ${-base_z/2+arm_proj_z}" rpy="0 ${-reflect*0.32792332} 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <box size="${arm_len} .054 .049"/>
+        </geometry>
+        <origin xyz="${reflect*arm_proj_x/2} 0 ${-base_z/2+arm_proj_z}" rpy="0 ${-reflect*0.32792332} 0"/>
+      </collision>
+      <xacro:default_inertial mass="10"/>
+    </link>
+    <gazebo reference="${prefix}_arm">
+    </gazebo>
+
+    <joint name="base_to_${prefix}_arm" type="fixed">
+      <parent link="base_link"/>
+      <child link="${prefix}_arm"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="0 0 ${-base_z/2}"/>
+      <limit lower="${-0.2}" upper="${0.2}" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- arm_ext -->
+    <link name="${prefix}_arm_ext">
+      <visual>
+        <geometry>
+          <box size="${arm_ext_len} .019 .025"/>
+        </geometry>
+        <origin xyz="${reflect*(arm_ext_proj_x/2)} 0 ${arm_ext_proj_z/2}" rpy="0 ${-reflect*0.69919259} 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${arm_ext_len} .019 .025"/>
+        </geometry>
+        <origin xyz="${reflect*(arm_ext_proj_x/2)} 0 ${arm_ext_proj_z/2}" rpy="0 ${-reflect*0.69919259} 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link> 
+    <gazebo reference="${prefix}_arm_ext">
+    </gazebo>
+
+    <joint name="${prefix}_arm_to_${prefix}_arm_ext" type="fixed">
+      <parent link="${prefix}_arm"/>
+      <child link="${prefix}_arm_ext"/>
+      <origin xyz="${reflect*arm_proj_x} 0 ${arm_proj_z}"/>
+    </joint>
+ 
+<!-- arm_mobile_ext_1 -->
+    <link name="${prefix}_arm_mobile_ext_1">
+      <visual>
+        <geometry>
+          <box size="${arm_mobile_ext_1_len} .019 .025"/>
+        </geometry>
+        <origin xyz="${-reflect*(arm_mobile_ext_1_proj_x/2)} 0 ${-arm_mobile_ext_1_proj_z/2}" rpy="0 ${-reflect*1.047621071} 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <box size="${arm_mobile_ext_1_len} .019 .025"/>
+        </geometry>
+        <origin xyz="${-reflect*(arm_mobile_ext_1_proj_x/2)} 0 ${-arm_mobile_ext_1_proj_z/2}" rpy="0 ${-reflect*1.047621071} 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="${prefix}_arm_mobile_ext_1">
+    </gazebo>
+
+    <joint name="${prefix}_arm_ext_to_${prefix}_arm_mobile_ext_1" type="fixed">
+      <parent link="${prefix}_arm_ext"/>
+      <child link="${prefix}_arm_mobile_ext_1"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="${reflect*(arm_ext_proj_x)} 0 ${arm_ext_proj_z}"/>
+      <limit lower="0.0" upper="${-reflect*2.8}" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- arm_mobile_ext_2 -->
+    <link name="${prefix}_arm_mobile_ext_2">
+      <visual>
+        <geometry>
+          <box size="${arm_mobile_ext_2_len} .019 .025"/>
+        </geometry>
+        <origin xyz="${-reflect*(arm_mobile_ext_2_proj_x/2)} 0 ${-arm_mobile_ext_2_proj_z/2}" rpy="0 ${-reflect*0.737295256} 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <box size="${arm_mobile_ext_2_len} .019 .025"/>
+        </geometry>
+        <origin xyz="${-reflect*(arm_mobile_ext_2_proj_x/2)} 0 ${-arm_mobile_ext_2_proj_z/2}" rpy="0 ${-reflect*0.737295256} 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="${prefix}_arm_mobile_ext_2">
+    </gazebo>
+
+    <joint name="${prefix}_arm_mobile_ext_1_to_${prefix}_arm_mobile_ext_2" type="fixed">
+      <parent link="${prefix}_arm_mobile_ext_1"/>
+      <child link="${prefix}_arm_mobile_ext_2"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="${-reflect*(arm_mobile_ext_1_proj_x)} 0 ${-arm_mobile_ext_1_proj_z}"/>
+      <limit lower="0.0" upper="${-reflect*2.8}" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+      <mimic joint="${prefix}_arm_ext_to_${prefix}_arm_mobile_ext_1" multiplier="-1" offset="0" />
+    </joint>
+
+<!-- arm_mobile_ext_3 -->
+    <link name="${prefix}_arm_mobile_ext_3">
+      <visual>
+        <geometry>
+          <box size="${arm_mobile_ext_3_len} .019 .025"/>
+        </geometry>
+        <origin xyz="${reflect*(arm_mobile_ext_3_proj_x/2)} 0 ${arm_mobile_ext_3_proj_z/2}" rpy="0 ${-reflect*(1.045811364)} 0"/>
+        <material name="grey"/>  
+      </visual>
+      <collision>    
+        <geometry>
+          <box size="${arm_mobile_ext_3_len} .019 .025"/>
+        </geometry>
+        <origin xyz="${reflect*(arm_mobile_ext_3_proj_x/2)} 0 ${arm_mobile_ext_3_proj_z/2}" rpy="0 ${-reflect*(1.045811364)} 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="${prefix}_arm_mobile_ext_3">
+    </gazebo>
+
+    <joint name="${prefix}_arm_mobile_ext_2_to_${prefix}_arm_mobile_ext_3" type="fixed">
+      <parent link="${prefix}_arm_mobile_ext_2"/>
+      <child link="${prefix}_arm_mobile_ext_3"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="${-reflect*(arm_mobile_ext_2_proj_x)} 0 ${-arm_mobile_ext_2_proj_z}"/>
+      <limit lower="0.0" upper="${-reflect*2.8}" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+      <mimic joint="${prefix}_arm_ext_to_${prefix}_arm_mobile_ext_1" multiplier="1" offset="0" />
+    </joint>
+
+  </xacro:macro>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+<!-- axle_macro -->
+  <xacro:macro name="axle" params="prefix reflect">
+
+<!-- triangle_base -->
+    <link name="${prefix}_triangle_base">
+      <visual>
+        <geometry>
+          <box size="0.080 .010 .010"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.080 .010 .010"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link> 
+    <gazebo reference="${prefix}_triangle_base">
+    </gazebo>
+
+    <joint name="${prefix}_arm_mobile_ext_2_to_${prefix}_triangle_base" type="fixed">
+      <parent link="${prefix}_arm_mobile_ext_2"/>
+      <child link="${prefix}_triangle_base"/>
+      <origin xyz="${reflect*0.050} 0 ${arm_mobile_ext_1_len/2}" rpy="0 0 0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- left_triangle_side -->
+    <link name="${prefix}_left_triangle_side">
+      <visual>
+        <geometry>
+          <box size="${triangle_side_len} .010 .010"/>
+        </geometry>
+        <origin xyz="${triangle_side_proj_z/2} ${-triangle_side_proj_y/2} 0" rpy="0 0 0.242071695"/>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${triangle_side_len} .010 .010"/>
+        </geometry>
+        <origin xyz="${triangle_side_proj_z/2} ${-triangle_side_proj_y/2} 0" rpy="0 0 0.242071695"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link> 
+    <gazebo reference="${prefix}_left_triangle_side">
+    </gazebo>
+
+    <joint name="${prefix}_triangle_base_to_${prefix}_left_triangle_side" type="fixed">
+      <parent link="${prefix}_triangle_base"/>
+      <child link="${prefix}_left_triangle_side"/>
+      <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint> 
+
+<!-- right_triangle_side -->
+    <link name="${prefix}_right_triangle_side">
+      <visual>
+        <geometry>
+          <box size="${triangle_side_len} .010 .010"/>
+        </geometry>
+        <origin xyz="${triangle_side_proj_z/2} ${triangle_side_proj_y/2} 0" rpy="0 0 -0.242071695"/>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${triangle_side_len} .010 .010"/>
+        </geometry>
+        <origin xyz="${triangle_side_proj_z/2} ${triangle_side_proj_y/2} 0" rpy="0 0 -0.242071695"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link> 
+    <gazebo reference="${prefix}_right_triangle_side">
+    </gazebo>
+
+    <joint name="${prefix}_triangle_base_to_${prefix}_right_triangle_side" type="fixed">
+      <parent link="${prefix}_triangle_base"/>
+      <child link="${prefix}_right_triangle_side"/>
+      <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- right_direction_axis -->
+    <link name="${prefix}_right_direction_axis">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${direction_axis_len}"/>
+        </geometry>
+        <origin xyz="0 ${-direction_axis_proj_y/2} ${-direction_axis_proj_z/2}" rpy="${(pi/2)+0.145793599} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${direction_axis_len}"/>
+        </geometry>
+        <origin xyz="0 ${-direction_axis_proj_y/2} ${-direction_axis_proj_z/2}" rpy="${(pi/2)+0.145793599} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="${prefix}_right_direction_axis">
+    </gazebo>
+
+    <joint name="${prefix}_triangle_base_to_${prefix}_right_direction_axis" type="revolute">
+      <parent link="${prefix}_triangle_base"/>
+      <child link="${prefix}_right_direction_axis"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 0 ${-triangle_side_proj_z}" rpy="0 0 0"/>
+      <limit lower="-0.5" upper="0.5" effort="0.5293" velocity="6.159937255" />
+      <!-- <dynamics damping="0.0" friction="0.0"/> -->
+      <!-- <mimic joint="${prefix}_triangle_base_to_${prefix}_right_balance_support" multiplier="1" offset="0" /> -->
+    </joint>
+
+    <!-- Used to simulate balance -->
+    <!-- <transmission name="${prefix}_triangle_base_to_${prefix}_right_direction_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}_triangle_base_to_${prefix}_right_direction_axis">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}_triangle_base_to_${prefix}_right_direction_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission> -->
+
+<!-- left_direction_axis -->
+    <link name="${prefix}_left_direction_axis">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${direction_axis_len}"/>
+        </geometry>
+        <origin xyz="0 ${direction_axis_proj_y/2} ${-direction_axis_proj_z/2}" rpy="${(pi/2)-0.145793599} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${direction_axis_len}"/>
+        </geometry>
+        <origin xyz="0 ${direction_axis_proj_y/2} ${-direction_axis_proj_z/2}" rpy="${(pi/2)-0.145793599} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="${prefix}_left_direction_axis">
+    </gazebo>
+
+    <joint name="${prefix}_right_direction_axis_to_${prefix}_left_direction_axis" type="fixed">
+      <parent link="${prefix}_right_direction_axis"/>
+      <child link="${prefix}_left_direction_axis"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+      <!-- <mimic joint="${prefix}_triangle_base_to_${prefix}_right_balance_support" multiplier="1" offset="0" /> -->
+    </joint>
+
+<!-- right_steering_support -->
+    <link name="${prefix}_right_steering_support">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${steering_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${steering_support_proj_y/2} ${steering_support_proj_z/2}" rpy="${(pi/2)+1.476870612} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${steering_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${steering_support_proj_y/2} ${steering_support_proj_z/2}" rpy="${(pi/2)+1.476870612} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="${prefix}_right_steering_support">
+    </gazebo>
+
+    <joint name="${prefix}_right_direction_axis_to_${prefix}_right_steering_support" type="revolute">
+      <parent link="${prefix}_right_direction_axis"/>
+      <child link="${prefix}_right_steering_support"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 ${-direction_axis_proj_y} ${-direction_axis_proj_z}" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+      <!--  <mimic joint="${prefix}_triangle_base_to_${prefix}_right_balance_support" multiplier="-1" offset="0" /> -->
+    </joint>
+
+
+<!-- left_steering_support -->
+    <link name="${prefix}_left_steering_support">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${steering_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${-steering_support_proj_y/2} ${steering_support_proj_z/2}" rpy="${(pi/2)-1.476870612} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${steering_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${-steering_support_proj_y/2} ${steering_support_proj_z/2}" rpy="${(pi/2)-1.476870612} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="${prefix}_left_steering_support">
+    </gazebo>
+
+    <joint name="${prefix}_left_direction_axis_${prefix}_left_steering_support" type="revolute">
+      <parent link="${prefix}_left_direction_axis"/>
+      <child link="${prefix}_left_steering_support"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 ${direction_axis_proj_y} ${-direction_axis_proj_z}" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+     <!-- <mimic joint="${prefix}_triangle_base_to_${prefix}_right_balance_support" multiplier="-1" offset="0" /> -->
+    </joint>
+
+<!-- right_balance_support -->
+    <link name="${prefix}_right_balance_support">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${balance_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${balance_support_proj_y/2} ${balance_support_proj_z/2}" rpy="${(pi/2)+0.235323791} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${balance_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${balance_support_proj_y/2} ${balance_support_proj_z/2}" rpy="${(pi/2)+0.235323791} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="${prefix}_right_balance_support">
+    </gazebo>
+
+    <joint name="${prefix}_right_steering_support_to_${prefix}_right_balance_support" type="revolute">
+      <parent link="${prefix}_right_steering_support"/>
+      <child link="${prefix}_right_balance_support"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 ${steering_support_proj_y} ${steering_support_proj_z}" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- left_balance_support -->
+    <link name="${prefix}_left_balance_support">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${balance_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${-balance_support_proj_y/2} ${balance_support_proj_z/2}" rpy="${(pi/2)-0.235323791} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${balance_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${-balance_support_proj_y/2} ${balance_support_proj_z/2}" rpy="${(pi/2)-0.235323791} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="${prefix}_left_balance_support">
+    </gazebo>
+
+    <joint name="${prefix}_left_steering_support_to_${prefix}_left_balance_support" type="revolute">
+      <parent link="${prefix}_left_steering_support"/>
+      <child link="${prefix}_left_balance_support"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 ${-steering_support_proj_y} ${steering_support_proj_z}" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+      <!-- <mimic joint="${prefix}_triangle_base_to_${prefix}_right_balance_support" multiplier="1" offset="0" /> -->
+    </joint>
+
+    <gazebo>
+      <joint name="${prefix}_left_balance_to_triangle_loop" type="revolute">
+        <parent>${prefix}_triangle_base</parent>
+        <child>${prefix}_left_balance_support</child>
+        <pose>0 ${-balance_support_proj_y} ${balance_support_proj_z} 0 0 0</pose>
+        <axis> 
+          <xyz>1 0 0</xyz>
+
+        </axis>
+      </joint>
+    </gazebo>
+
+   <gazebo>
+      <joint name="${prefix}_right_balance_to_triangle_loop" type="revolute">
+        <parent>${prefix}_triangle_base</parent>
+        <child>${prefix}_right_balance_support</child>
+        <pose>0 ${balance_support_proj_y} ${balance_support_proj_z} 0 0 0</pose>
+        <axis> 
+          <xyz>1 0 0</xyz>
+        </axis>
+      </joint>
+    </gazebo>
+
+<!-- add_front_rear_wheels -->
+    <xacro:wheel prefix="${prefix}" suffix="left" reflect2="1" />
+    <xacro:wheel prefix="${prefix}" suffix="right" reflect2="-1"/>
+  </xacro:macro>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+<!-- middle axis -->
+<!-- middle_triangle_base -->
+    <link name="middle_triangle_base">
+      <visual>
+        <geometry>
+          <box size="0.140 .010 .010"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="0.140 .010 .010"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${pi/2}"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link> 
+    <gazebo reference="middle_triangle_base">
+    </gazebo>
+
+    <joint name="base_link_to_middle_triangle_base" type="fixed">
+      <parent link="base_link"/>
+      <child link="middle_triangle_base"/>
+      <origin xyz="0 0 ${-base_z/2}" rpy="0 0 0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- middle_left_triangle_side -->
+    <link name="middle_left_triangle_side">
+      <visual>
+        <geometry>
+          <box size="${middle_triangle_side_len} .010 .010"/>
+        </geometry>
+        <origin xyz="${-middle_triangle_side_proj_z/2} ${-middle_triangle_side_proj_y/2} 0" rpy="0 0 ${1.192250731+pi/2}"/>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${middle_triangle_side_len} .010 .010"/>
+        </geometry>
+        <origin xyz="${-middle_triangle_side_proj_z/2} ${-middle_triangle_side_proj_y/2} 0" rpy="0 0 ${1.192250731+pi/2}"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="middle_left_triangle_side">
+    </gazebo> 
+
+    <joint name="middle_triangle_base_to_middle_left_triangle_side" type="fixed">
+      <parent link="middle_triangle_base"/>
+      <child link="middle_left_triangle_side"/>
+      <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint> 
+
+<!-- middle_right_triangle_side -->
+    <link name="middle_right_triangle_side">
+      <visual>
+        <geometry>
+          <box size="${middle_triangle_side_len} .010 .010"/>
+        </geometry>
+        <origin xyz="${-middle_triangle_side_proj_z/2} ${middle_triangle_side_proj_y/2} 0" rpy="0 0 ${-1.192250731+pi/2}"/>
+        <material name="grey"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${middle_triangle_side_len} .010 .010"/>
+        </geometry>
+        <origin xyz="${-middle_triangle_side_proj_z/2} ${middle_triangle_side_proj_y/2} 0" rpy="0 0 ${-1.192250731+pi/2}"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link> 
+    <gazebo reference="middle_right_triangle_side">
+    </gazebo>
+
+    <joint name="middle_triangle_base_to_middle_right_triangle_side" type="fixed">
+      <parent link="middle_triangle_base"/>
+      <child link="middle_right_triangle_side"/>
+      <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- middle_right_direction_axis -->
+    <link name="middle_right_direction_axis">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${middle_direction_axis_len}"/>
+        </geometry>
+        <origin xyz="0 ${-middle_direction_axis_proj_y/2} ${-middle_direction_axis_proj_z/2}" rpy="${(pi/2)+0.17660236} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${direction_axis_len}"/>
+        </geometry>
+        <origin xyz="0 ${-middle_direction_axis_proj_y/2} ${-middle_direction_axis_proj_z/2}" rpy="${(pi/2)+0.17660236} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="middle_right_direction_axis">
+    </gazebo>
+
+    <joint name="middle_triangle_base_to_middle_right_direction_axis" type="fixed">
+      <parent link="middle_triangle_base"/>
+      <child link="middle_right_direction_axis"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 ${-0.07} 0" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="1" offset="0" /> -->
+    </joint>
+
+<!-- middle_left_direction_axis -->
+    <link name="middle_left_direction_axis">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${middle_direction_axis_len}"/>
+        </geometry>
+        <origin xyz="0 ${middle_direction_axis_proj_y/2} ${-middle_direction_axis_proj_z/2}" rpy="${(pi/2)-0.17660236} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${direction_axis_len}"/>
+        </geometry>
+        <origin xyz="0 ${middle_direction_axis_proj_y/2} ${-middle_direction_axis_proj_z/2}" rpy="${(pi/2)-0.17660236} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="middle_left_direction_axis">
+    </gazebo>
+
+    <joint name="middle_triangle_base_to_middle_left_direction_axis" type="fixed">
+      <parent link="middle_triangle_base"/>
+      <child link="middle_left_direction_axis"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 ${0.07} 0" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="1" offset="0" /> -->
+    </joint>
+
+<!-- middle_right_steering_support -->
+    <link name="middle_right_steering_support">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${middle_steering_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${middle_steering_support_proj_y/2} ${middle_steering_support_proj_z/2}" rpy="${(pi/2)+1.476870612} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${middle_steering_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${middle_steering_support_proj_y/2} ${middle_steering_support_proj_z/2}" rpy="${(pi/2)+1.476870612} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="middle_right_steering_support">
+    </gazebo>
+
+    <joint name="middle_right_direction_axis_to_middle_right_steering_support" type="fixed">
+      <parent link="middle_right_direction_axis"/>
+      <child link="middle_right_steering_support"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 ${-middle_direction_axis_proj_y} ${-middle_direction_axis_proj_z}" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="-1" offset="0" /> -->
+    </joint>
+
+<!-- middle_left_steering_support -->
+    <link name="middle_left_steering_support">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${steering_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${-middle_steering_support_proj_y/2} ${middle_steering_support_proj_z/2}" rpy="${(pi/2)-1.476870612} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${middle_steering_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${-middle_steering_support_proj_y/2} ${middle_steering_support_proj_z/2}" rpy="${(pi/2)-1.476870612} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="middle_left_steering_support">
+    </gazebo>
+
+    <joint name="middle_left_direction_axis_to_middle_left_steering_support" type="fixed">
+      <parent link="middle_left_direction_axis"/>
+      <child link="middle_left_steering_support"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 ${middle_direction_axis_proj_y} ${-middle_direction_axis_proj_z}" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="-1" offset="0" /> -->
+    </joint>
+
+<!-- middle_right_balance_support -->
+    <link name="middle_right_balance_support">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${middle_balance_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${middle_balance_support_proj_y/2} ${middle_balance_support_proj_z/2}" rpy="${(pi/2)+0.24621019} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${middle_balance_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${middle_balance_support_proj_y/2} ${middle_balance_support_proj_z/2}" rpy="${(pi/2)+0.24621019} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="middle_right_balance_support">
+    </gazebo>
+
+    <joint name="middle_right_steering_support_to_middle_right_balance_support" type="fixed">
+      <parent link="middle_right_steering_support"/>
+      <child link="middle_right_balance_support"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 ${middle_steering_support_proj_y} ${middle_steering_support_proj_z}" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- middle_left_balance_support -->
+    <link name="middle_left_balance_support">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.005}" length="${middle_balance_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${-middle_balance_support_proj_y/2} ${middle_balance_support_proj_z/2}" rpy="${(pi/2)-0.24621019} 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.005}" length="${middle_balance_support_len}"/>
+        </geometry>
+        <origin xyz="0 ${-middle_balance_support_proj_y/2} ${middle_balance_support_proj_z/2}" rpy="${(pi/2)-0.24621019} 0 0"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="middle_left_balance_support">
+    </gazebo>
+
+    <joint name="middle_left_steering_support_to_middle_left_balance_support" type="fixed">
+      <parent link="middle_left_steering_support"/>
+      <child link="middle_left_balance_support"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="0 ${-middle_steering_support_proj_y} ${middle_steering_support_proj_z}" rpy="0 0 0"/>
+      <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" />
+      <dynamics damping="0.0" friction="0.0"/>
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="1" offset="0" /> -->
+    </joint>
+
+    <gazebo>
+      <joint name="middle_left_balance_to_triangle_loop" type="revolute">
+        <parent>middle_left_balance_support</parent>
+        <child>middle_triangle_base</child>
+        <pose>0 ${-middle_balance_support_proj_y} ${middle_balance_support_proj_z} 0 0 0</pose>
+        <axis> 
+          <xyz>1 0 0</xyz>
+        </axis>
+      </joint>
+    </gazebo>
+
+    <gazebo>
+      <joint name="middle_right_balance_to_triangle_loop" type="revolute">
+        <parent>middle_right_balance_support</parent>
+        <child>middle_triangle_base</child>
+        <pose>0 ${middle_balance_support_proj_y} ${middle_balance_support_proj_z} 0 0 0</pose>
+        <axis> 
+          <xyz>1 0 0</xyz>
+        </axis>
+      </joint>
+    </gazebo>
+
+    <xacro:wheel prefix="middle" suffix="left" reflect2="1" />
+    <xacro:wheel prefix="middle" suffix="right" reflect2="-1"/>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+<!-- wheel_macro -->
+  <xacro:macro name="wheel" params="prefix suffix reflect2 ">
+
+    <link name="${prefix}_${suffix}_wheel">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+        <geometry>
+          <cylinder radius="${wheeldiam/2}" length="${wheelthick}"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+        <geometry>
+          <cylinder radius="${wheeldiam/2}" length="${wheelthick}"/>
+        </geometry>
+      </collision>
+      <xacro:default_inertial mass="5"/>
+    </link>
+    <!-- This block provides the simulator (Gazebo) with information on a few additional
+    physical properties. See http://gazebosim.org/tutorials/?tut=ros_urdf for more-->
+    <gazebo reference="${prefix}_${suffix}_wheel">
+      <mu1 value="1.0"/>
+      <mu2 value="1.0"/>
+      <kp value="10000000.0" />
+      <kd value="1.0" />
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <joint name="${prefix}_${suffix}_wheel_joint" type="continuous">
+      <parent link="${prefix}_${suffix}_steering_support"/>
+      <child link="${prefix}_${suffix}_wheel"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="0 ${reflect2*(wheelthick/2)} 0" rpy="0 0 0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+    <!-- This block connects the wheel joint to an actuator (motor), which informs both
+    simulation and visualization of the robot -->
+    <transmission name="${prefix}_${suffix}_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}_${suffix}_wheel_joint"> 
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}_${suffix}_wheel_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission> 
+
+    <link name="${prefix}_${suffix}_wheel_ext">
+      <visual>
+        <geometry>
+          <cylinder radius="0.03" length="0.06"/>
+        </geometry>
+        <material name="grey"/>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="0.03" length="0.06"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+      </collision>
+      <xacro:default_inertial mass="0"/>
+    </link>
+    <gazebo reference="${prefix}_${suffix}_wheel_ext">
+    </gazebo>
+
+    <joint name="${prefix}_${suffix}_wheel_to_${prefix}_${suffix}_wheel_ext" type="fixed">
+      <parent link="${prefix}_${suffix}_wheel"/>
+      <child link="${prefix}_${suffix}_wheel_ext"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="0 ${reflect2*(wheelthick/2+0.03)} 0" rpy="${pi/2} 0 0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+  </xacro:macro>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+<!-- turret_arm -->
+    <link name="turret_arm">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.01}" length="${turret_arm_len}"/>
+        </geometry>
+        <origin xyz="0 0 ${(turret_arm_z_ref_base+base_z/2+middle_direction_axis_proj_z+wheeldiam/2)/2}" rpy="0 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.01}" length="${turret_arm_len}"/>
+        </geometry>
+        <origin xyz="0 0 ${(turret_arm_z_ref_base+base_z/2+middle_direction_axis_proj_z+wheeldiam/2)/2}" rpy="0 0 0"/>
+      </collision> 
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="turret_arm">
+    </gazebo>
+
+    <joint name="base_to_turret_arm" type="fixed">
+      <parent link="base_link"/>
+      <child link="turret_arm"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="${turret_arm_x_ref_base} ${-turret_arm_y_ref_base} ${-base_z/2-middle_direction_axis_proj_z-wheeldiam/2}"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- from ~/flir-ptu-description/urdf/d46.urdf.xacro -->
+  <xacro:macro name="d46_stepper_module"
+               params="ptu_name joint_name">
+    <link name="${ptu_name}_${joint_name}_link">
+      <!-- <inertial>
+        <mass value="0.65" />
+        <inertia ... ? />
+      </inertial> -->
+      <visual>
+        <material name="ptu_body_color">
+          <color rgba="0.3 0.3 0.3 1.0" />
+        </material>
+        <geometry>
+          <box size="0.045 0.065 0.044" />
+        </geometry>
+        <origin xyz="0 0.011 0" />
+      </visual>
+      <visual>
+        <geometry>
+          <box size="0.046 0.044 0.044" />
+        </geometry>
+        <origin xyz="-0.045 0.0215 0" />
+      </visual>
+      <visual>
+        <geometry>
+          <cylinder length="0.015" radius="0.005" />
+        </geometry>
+        <origin xyz="-0.074 0.021 0" rpy="0 1.57 0" />
+      </visual>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="ptu_d46" params="name">
+    <d46_stepper_module ptu_name="${name}" joint_name="pan" />
+    <d46_stepper_module ptu_name="${name}" joint_name="tilt" />
+    <!--<link name="${name}_base_link" /> -->
+    <link name="${name}_tilted_link" />
+    <!--<link name="${name}_mount_link" /> -->
+
+    <!-- There's an offset between the origin of the pan joint and the origin of 
+         the overall device, which is between the mounting screws on its base. -->
+
+    <joint name="turret_arm_to_ptu_pan" type="fixed">
+      <parent link="turret_arm"/>
+      <child link="${name}_pan_link"/>
+      <origin xyz="0 0 ${turret_arm_z_ref_base}"/>
+    </joint>
+
+    <!--<joint name="${name}_base" type="fixed">
+      <parent link="${name}_base_link"/>
+      <child link="${name}_pan_link"/>
+      <origin xyz="0 -0.011 0.022"/>
+    </joint>-->
+
+    <!-- The pan joint -->
+    <joint name="${name}_pan" type="revolute">
+      <parent link="${name}_pan_link" />
+      <origin xyz="0 0 0.066" rpy="-1.5708 0 0" />
+      <child link="${name}_tilt_link" />
+      <axis xyz="0 -1 0" rpy="3.14159 0 0" />
+      <limit lower="${-pan_range}" upper="${pan_range}"
+             effort="${joint_effort}" velocity="${pan_velocity}" />
+    </joint>
+
+    <!-- The tilt joint -->
+    <joint name="${name}_tilt" type="revolute">
+      <parent link="${name}_tilt_link" />
+      <origin xyz="0 0 0" rpy="-1.5708 0 0" />
+      <child link="${name}_tilted_link" />
+      <axis xyz="0 1 0" />
+      <limit lower="${-tilt_down_range}" upper="${tilt_up_range}"
+             effort="${joint_effort}" velocity="${tilt_velocity}" />
+    </joint>
+
+    <!-- Fixed joint to provide a convenient attachment point for accessories. -->
+    <!-- <joint name="${name}_mount" type="fixed">
+      <parent link="${name}_tilted_link"/>
+      <child link="${name}_mount_link"/>
+      <origin xyz="0 0 -0.03912" rpy="3.1416 0 0" />
+    </joint> -->
+  </xacro:macro>
+
+<!-- tuuret macro used -->
+  <ptu_d46 name="ptu" />
+
+<!-- nav_camera -->
+    <link name="nav_camera"/>
+    <gazebo reference="nav_camera">
+    </gazebo>
+
+    <joint name="ptu_tilt_to_nav_camera" type="fixed">
+      <parent link="ptu_tilted_link"/>
+      <child link="nav_camera"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="${tilt_to_opt_center_nav_SB_x} 0 ${tilt_to_opt_center_nav_SB_z}" rpy="${-pi/2} 0 ${-pi/2}"/>
+      <!-- <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" /> -->
+      <dynamics damping="0.0" friction="0.0"/>
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="1" offset="0" /> -->
+    </joint>
+
+<!-- nav_camera/left -->
+<!--    <link name="nav_camera/left"/>
+    <gazebo reference="nav_camera/left">
+    </gazebo>
+
+    <joint name="ptu_tilt_to_nav_camera_left" type="fixed">
+      <parent link="ptu_tilt"/>
+      <child link="nav_camera/left"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="${tilt_to_opt_center_nav_SB_x} ${tilt_to_opt_center_nav_SB_y} ${tilt_to_opt_center_nav_SB_z}" rpy="0 0 0"/> -->
+      <!-- <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" /> -->
+      <!-- <dynamics damping="0.0" friction="0.0"/> -->
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="1" offset="0" /> -->
+    <!-- </joint> -->
+
+<!-- nav_camera/right -->
+<!--     <link name="nav_camera/right"/>
+    <gazebo reference="nav_camera/right">
+    </gazebo>
+
+    <joint name="ptu_tilt_to_nav_camera_right" type="fixed">
+      <parent link="ptu_tilt"/>
+      <child link="nav_camera/right"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="${tilt_to_opt_center_nav_SB_x} ${-tilt_to_opt_center_nav_SB_y} ${tilt_to_opt_center_nav_SB_z}" rpy="0 0 0"/> -->
+      <!-- <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" /> -->
+      <!-- <dynamics damping="0.0" friction="0.0"/> -->
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="1" offset="0" /> -->
+    <!-- </joint> -->
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+<!-- gps_arm -->
+    <link name="gps_arm">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.01}" length="${gps_arm_len}"/>
+        </geometry>
+        <origin xyz="0 0 ${gps_arm_z_ref_base/2+base_z/2+middle_direction_axis_proj_z+wheeldiam/2}" rpy="0 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.01}" length="${gps_arm_len}"/>
+        </geometry>
+        <origin xyz="0 0 ${gps_arm_z_ref_base/2+base_z/2+middle_direction_axis_proj_z+wheeldiam/2}" rpy="0 0 0"/>
+      </collision> 
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="gps_arm">
+    </gazebo>
+
+    <joint name="base_to_gps_arm" type="fixed">
+      <parent link="base_link"/>
+      <child link="gps_arm"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="${gps_arm_x_ref_base} ${-gps_arm_y_ref_base} ${-base_z/2-middle_direction_axis_proj_z-wheeldiam/2}"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+<!-- cam_odom_arm -->
+    <link name="cam_odom_arm">
+      <visual>
+        <geometry>
+          <cylinder radius="${0.01}" length="${cam_odom_arm_z_ref_base-base_z/2-middle_direction_axis_proj_z-wheeldiam/2}"/>
+        </geometry>
+        <origin xyz="0 0 ${cam_odom_arm_z_ref_base/2+(base_z/2+middle_direction_axis_proj_z+wheeldiam/2)/2}" rpy="0 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <cylinder radius="${0.01}" length="${cam_odom_arm_z_ref_base-base_z/2-middle_direction_axis_proj_z-wheeldiam/2}"/>
+        </geometry>
+        <origin xyz="0 0 ${cam_odom_arm_z_ref_base/2+base_z/2+middle_direction_axis_proj_z+wheeldiam/2}" rpy="0 0 0"/>
+      </collision> 
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="cam_odom_arm">
+    </gazebo>
+
+    <joint name="base_to_cam_odom_arm" type="fixed">
+      <parent link="base_link"/>
+      <child link="cam_odom_arm"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="${cam_odom_arm_x_ref_base} ${-cam_odom_arm_y_ref_base} ${-base_z/2-middle_direction_axis_proj_z-wheeldiam/2}"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- cam_odom_base -->
+    <link name="cam_odom_base">
+      <visual>
+        <geometry>
+          <box size=".050 .100 .010"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <material name="grey"/>
+      </visual>
+      <collision>    
+        <geometry>
+          <box size=".050 .100 .010"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </collision> 
+      <xacro:default_inertial mass="1"/>
+    </link>
+    <gazebo reference="cam_odom_base">
+    </gazebo>
+
+    <joint name="cam_odom_arm_to_cam_odom_base" type="fixed">
+      <parent link="cam_odom_arm"/>
+      <child link="cam_odom_base"/>
+      <axis xyz="0 1 0"/>
+        <origin xyz="0 0 ${cam_odom_arm_z_ref_base}" rpy="0 ${pi/8} 0"/>
+      <dynamics damping="0.0" friction="0.0"/>
+    </joint>
+
+<!-- odom_camera -->
+    <link name="odom_camera"/>
+    <gazebo reference="odom_camera">
+    </gazebo>
+
+    <joint name="cam_odom_arm_to_odom_camera" type="fixed">
+      <parent link="cam_odom_arm"/>
+      <child link="odom_camera"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="${cam_odom_arm_to_opt_center_odom_SB_x} 0 ${cam_odom_arm_z_ref_base+cam_odom_arm_to_opt_center_odom_SB_z}" rpy="${-pi/2-cam_odom_tilt_ref_base} 0 ${-pi/2}"/> 
+      <!-- <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" /> -->
+       <dynamics damping="0.0" friction="0.0"/>
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="1" offset="0" /> -->
+     </joint> 
+
+<!-- odom_camera/left -->
+<!--    <link name="odom_camera/left"/>
+    <gazebo reference="odom_camera/left">
+    </gazebo>
+
+    <joint name="cam_odom_arm_to_odom_camera_left" type="fixed">
+      <parent link="cam_odom_arm"/>
+      <child link="odom_camera/left"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="${cam_odom_arm_to_opt_center_odom_SB_x} ${cam_odom_arm_to_opt_center_odom_SB_y} ${cam_odom_arm_z_ref_base+cam_odom_arm_to_opt_center_odom_SB_z}" rpy="0 ${cam_odom_tilt_ref_base} 0"/> -->
+      <!-- <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" /> -->
+      <!-- <dynamics damping="0.0" friction="0.0"/> -->
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="1" offset="0" /> -->
+    <!-- </joint> -->
+
+<!-- odom_camera/right -->
+<!--    <link name="odom_camera/right"/>
+    <gazebo reference="odom_camera/right">
+    </gazebo>
+
+    <joint name="cam_odom_arm_to_odom_camera_right" type="fixed">
+      <parent link="cam_odom_arm"/>
+      <child link="odom_camera/right"/>
+      <axis xyz="1 0 0"/>
+      <origin xyz="${cam_odom_arm_to_opt_center_odom_SB_x} ${-cam_odom_arm_to_opt_center_odom_SB_y} ${cam_odom_arm_z_ref_base+cam_odom_arm_to_opt_center_odom_SB_z}" rpy="0 ${cam_odom_tilt_ref_base} 0"/> -->
+      <!-- <limit lower="-1.5" upper="1.5" effort="0.5293" velocity="6.159937255" /> -->
+      <!-- <dynamics damping="0.0" friction="0.0"/> -->
+      <!-- <mimic joint="middle_triangle_base_to_middle_right_balance_support" multiplier="1" offset="0" /> -->
+    <!-- </joint> -->
+
+<!-- mono camera for test -->
+<!-- cam -->
+<!--    <joint name="cam_odom_base_to_camera_link" type="fixed">
+      <parent link="cam_odom_base"/>
+      <child link="/left"/>
+      <axis xyz="0 1 0"/>
+      <origin xyz="0 0 0.25" rpy="0 ${pi/2} 0"/>
+    </joint>
+
+  <link name="/left">
+    <visual>
+      <geometry>
+        <box size="${camera_link} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <material name="black"/>
+    </visual>
+    <collision> 
+      <geometry>
+        <box size="${camera_link} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </collision>
+    <xacro:default_inertial mass="1"/>
+  </link> -->
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->   
+<!-- front and rear arm  -->
+  <xacro:arm prefix="front" reflect="1"/>
+  <xacro:arm prefix="rear" reflect="-1"/>
+
+<!-- front and rear axle  -->
+  <xacro:axle prefix="front" reflect="1"/>
+  <xacro:axle prefix="rear" reflect="-1"/>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+<!-- Gazebo plugin for ROS Control -->
+  <gazebo>
+   <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/iartemis</robotNamespace>
+    </plugin>
+  </gazebo>
+
+<!-- Gazebo plugin for Cam -->tilt
+<!--<gazebo reference="camera_link">
+    <sensor type="camera" name="camera1">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>1024</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>-->
+          <!-- Noise is sampled independently per pixel on each frame.  
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+<!--          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        <cameraName>iartemis/camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera_link</frameName>
+        <hackBaseline>0.07</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>-->
+
+</robot>

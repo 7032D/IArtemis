@@ -1,0 +1,31 @@
+rosservice call /nav_camera/left/set_camera_info "camera_info:
+  header:
+    seq: 0
+    stamp: {secs: 0, nsecs: 0}
+    frame_id: 'nav_camera/left'
+  height: 1024
+  width: 1280
+  distortion_model: 'plumb_bob'
+  D: [-0.273113, 0.136259, 0.000050, -0.000481, 0.000000]
+  K: [1085.202881, 0.000000, 622.825845, 0.000000, 1085.210317, 502.582145, 0.000000, 0.000000, 1.000000]
+  R: [0.997509, -0.025751, -0.065666, 0.025672, 0.999668, -0.002047, 0.065697, 0.000356, 0.997840]
+  P: [1033.465045, 0.000000, 712.374367, 0.000000, 0.000000, 1033.465045, 503.103931, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]
+  binning_x: 0
+  binning_y: 0
+  roi: {x_offset: 0, y_offset: 0, height: 0, width: 0, do_rectify: false}"                                                       
+
+ rosservice call /nav_camera/right/set_camera_info "camera_info:
+  header:
+    seq: 0
+    stamp: {secs: 0, nsecs: 0}
+    frame_id: 'nav_camera/right'
+  height: 1024
+  width: 1280
+  distortion_model: 'plumb_bob'
+  D: [-0.251831, 0.093744, 0.000302, -0.000226, 0.000000]
+  K: [1081.212582, 0.000000, 613.769273, 0.000000, 1077.728711, 502.461939, 0.000000, 0.000000, 1.000000]
+  R: [0.996641, -0.025363, -0.077872, 0.025457, 0.999676, 0.000211, 0.077841, -0.002192, 0.996963]
+  P: [1033.465045, 0.000000, 712.374367, -107.455728, 0.000000, 1033.465045, 503.103931, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]
+  binning_x: 0
+  binning_y: 0
+  roi: {x_offset: 0, y_offset: 0, height: 0, width: 0, do_rectify: false}" 
